@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ECNEWS Theme Generator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+        }
+        #preview-section {
+            margin: 20px;
+            border: 1px solid #ccc;
+            padding: 20px;
+            background: white;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-gray-100">
+    <div class="container mx-auto p-6">
+        <h1 class="text-3xl font-bold text-center mb-6">ECNEWS Theme Generator</h1>
+        <p class="text-center mb-8">Create a custom theme for your ECNEWS blog and download it for Blogger.</p>
+
+        <!-- Theme Input Form -->
+        <div class="bg-white p-6 rounded-lg shadow-md mb-8">
+            <h2 class="text-xl font-semibold mb-4">Theme Preferences</h2>
+            <form id="theme-form" class="space-y-4">
+                <div>
+                    <label for="news-type" class="block text-sm font-medium text-gray-700">News Type</label>
+                    <select id="news-type" class="mt-1 block w-full p-2 border rounded-md">
+                        <option value="general">General</option>
+                        <option value="technology">Technology</option>
+                        <option value="lifestyle">Lifestyle</option>
+                        <option value="business">Business</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="primary-color" class="block text-sm font-medium text-gray-700">Primary Color (Optional)</label>
+                    <input type="color" id="primary-color" class="mt-1 p-1 border rounded-md" placeholder="Select or leave for random">
+                </div>
+                <div>
+                    <label for="font" class="block text-sm font-medium text-gray-700">Font</label>
+                    <select id="font" class="mt-1 block w-full p-2 border rounded-md">
+                        <option value="Roboto">Roboto</option>
+                        <option value="Open Sans">Open Sans</option>
+                        <option value="Lora">Lora</option>
+                        <option value="Montserrat">Montserrat</option>
+                        <option value="Poppins">Poppins</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="sidebar" class="block text-sm font-medium text-gray-700">Sidebar Position</label>
+                    <select id="sidebar" class="mt-1 block w-full p-2 border rounded-md">
+                        <option value="left">Left</option>
+                        <option value="right">Right</option>
+                        <option value="none">None</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="header-style" class="block text-sm font-medium text-gray-700">Header Style</label>
+                    <select id="header-style" class="mt-1 block w-full p-2 border rounded-md">
+                        <option value="fixed">Fixed</option>
+                        <option value="static">Static</option>
+                    </select>
+                </div>
+                <button type="submit" class="w-full bg-blue-600 text-white p-2 rounded-md hover:bg-blue-700">Generate Theme</button>
+            </form>
+        </div>
+
+        <!-- Preview Section -->
+        <div id="preview-section" class="hidden">
+            <h2 class="text-xl font-semibold mb-4">Theme Preview</h2>
+            <div id="preview-content">
+                <header class="header">
+                    <h1>ECNEWS</h1>
+                    <p>Your Source for Latest News</p>
+                </header>
+                <div class="container">
+                    <main class="main-content">
+                        <h2>Welcome to ECNEWS</h2>
+                        <p>This is a preview of your custom theme for ECNEWS. Download and upload to Blogger!</p>
+                        <article>
+                            <h3>Sample News Article</h3>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                        </article>
+                    </main>
+                    <aside class="sidebar">
+                        <h3>News Categories</h3>
+                        <ul>
+                            <li><a href="#">Technology</a></li>
+                            <li><a href="#">Lifestyle</a></li>
+                            <li><a href="#">Business</a></li>
+                        </ul>
+                    </aside>
+                </div>
+                <footer class="footer">
+                    <p>© 2025 ECNEWS. All rights reserved.</p>
+                </footer>
+            </div>
+            <button id="download-btn" class="mt-4 w-full bg-green-600 text-white p-2 rounded-md hover:bg-green-700">Download Theme</button>
+        </div>
+    </div>
+
+    <script>
+        // Theme configuration
+        const COLOR_PALETTES = {
+            technology: ["#1E90FF", "#00CED1", "#4682B4", "#B0C4DE"],
+            lifestyle: ["#FF69B4", "#FFB6C1", "#FFD700", "#FFFACD"],
+            business: ["#2F4F4F", "#708090", "#B8860B", "#DAA520"],
+            general: ["#228B22", "#3CB371", "#9ACD32", "#F0FFF0"]
+        };
+
+        // Form submission handler
+        document.getElementById("theme-form").addEventListener("submit", (e) => {
+            e.preventDefault();
+
+            // Get user inputs
+            const newsType = document.getElementById("news-type").value;
+            const primaryColorInput = document.getElementById("primary-color").value;
+            const font = document.getElementById("font").value;
+            const sidebar = document.getElementById("sidebar").value;
+            const headerStyle = document.getElementById("header-style").value;
+
+            // Generate theme
+            const themeId = "theme-" + Math.random().toString(36).substr(2, 9);
+            const colors = COLOR_PALETTES[newsType] || COLOR_PALETTES.general;
+            const primaryColor = primaryColorInput || getRandom(colors);
+            const secondaryColor = getRandom(colors.filter(c => c !== primaryColor));
+
+            // Generate CSS
+            const css = `
+                /* Theme ID: ${themeId} */
+                @import url('https://fonts.googleapis.com/css2?family=${font.replace(" ", "+")}&display=swap');
+
+                body {
+                    font-family: '${font}', sans-serif;
+                    background-color: #f5f5f5;
+                    color: #333;
+                    margin: 0;
+                    padding: 0;
+                }
+
+                .header {
+                    background-color: ${primaryColor};
+                    color: white;
+                    padding: 20px;
+                    text-align: center;
+                    ${headerStyle === "fixed" ? "position: fixed; top: 0; width: 100%; z-index: 1000;" : ""}
+                }
+
+                .container {
+                    max-width: 1200px;
+                    margin: 0 auto;
+                    padding: 20px;
+                    display: flex;
+                    ${sidebar === "right" ? "flex-direction: row-reverse;" : ""}
+                }
+
+                .main-content {
+                    flex: 3;
+                    padding: 20px;
+                    background: white;
+                    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+                }
+
+                .sidebar {
+                    flex: 1;
+                    padding: 20px;
+                    background-color: ${secondaryColor};
+                    color: white;
+                    ${sidebar === "none" ? "display: none;" : ""}
+                }
+
+                .footer {
+                    background-color: ${primaryColor};
+                    color: white;
+                    text-align: center;
+                    padding: 10px;
+                    margin-top: 20px;
+                }
+
+                a {
+                    color: ${primaryColor};
+                    text-decoration: none;
+                }
+
+                a:hover {
+                    text-decoration: underline;
+                }
+
+                article {
+                    margin-bottom: 20px;
+                    padding-bottom: 20px;
+                    border-bottom: 1px solid #eee;
+                }
+            `;
+
+            // Apply CSS to preview
+            const styleEl = document.createElement("style");
+            styleEl.innerText = css;
+            document.getElementById("preview-content").prepend(styleEl);
+            document.getElementById("preview-section").classList.remove("hidden");
+
+            // Adjust container padding for fixed header
+            if (headerStyle === "fixed") {
+                document.querySelector("#preview-content .container").style.paddingTop = "120px";
+            }
+
+            // Download button handler
+            document.getElementById("download-btn").onclick = () => {
+                const htmlContent = `
+                    <!DOCTYPE html>
+                    <html lang="en">
+                    <head>
+                        <meta charset="UTF-8">
+                        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                        <title>ECNEWS Theme</title>
+                        <style>
+                            ${css}
+                        </style>
+                    </head>
+                    <body>
+                        <header class="header">
+                            <h1>ECNEWS</h1>
+                            <p>Your Source for Latest News</p>
+                        </header>
+                        <div class="container">
+                            <main class="main-content">
+                                <h2>Welcome to ECNEWS</h2>
+                                <p>This is a custom theme for your ECNEWS blog. Customize it further in Blogger!</p>
+                                <article>
+                                    <h3>Sample News Article</h3>
+                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                                </article>
+                            </main>
+                            ${sidebar !== "none" ? `
+                                <aside class="sidebar">
+                                    <h3>News Categories</h3>
+                                    <ul>
+                                        <li><a href="#">Technology</a></li>
+                                        <li><a href="#">Lifestyle</a></li>
+                                        <li><a href="#">Business</a></li>
+                                    </ul>
+                                </aside>
+                            ` : ""}
+                        </div>
+                        <footer class="footer">
+                            <p>© 2025 ECNEWS. All rights reserved.</p>
+                        </footer>
+                    </body>
+                    </html>
+                `;
+                const blob = new Blob([htmlContent], { type: "text/html" });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement("a");
+                a.href = url;
+                a.download = `ecnews-theme-${themeId}.html`;
+                a.click();
+                URL.revokeObjectURL(url);
+            };
+        });
+
+        // Random selection function
+        function getRandom(arr) {
+            return arr[Math.floor(Math.random() * arr.length)];
+        }
+    </script>
+</body>
+</html>
